@@ -25,8 +25,16 @@ class _LoginPageState extends State<LoginPage> {
     final result = await _securityService.authenticate(password: password);
 
     if (result || (await _securityService.isAuthenticated())) {
+      final hasUserData = await _securityService.getUser();
+
+      if (hasUserData) {
+        if (!mounted) return;
+        Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+        return;
+      }
+
       if (!mounted) return;
-      Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+      Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.profile, (route) => false);
       return;
     }
     setState(() {
@@ -35,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Senha inválida'),
+        content: Text('Senha de ativação inválida'),
         backgroundColor: Colors.red,
       ),
     );
@@ -44,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const USPAppBarWidget(),
+      appBar: USPAppBarWidget(qrCodeTap: () {}),
       body: Stack(
         children: [
           SizedBox(

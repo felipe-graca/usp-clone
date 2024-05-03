@@ -8,7 +8,7 @@ class UserModel {
   final String dueDate;
   final String id;
 
-  UserModel({
+  const UserModel({
     this.name = '',
     this.base64Image = '',
     this.faculdade = '',
@@ -30,12 +30,12 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      name: map['name'] as String,
-      base64Image: map['base64Image'] as String,
-      faculdade: map['faculdade'] as String,
-      typeCurse: map['typeCurse'] as String,
-      dueDate: map['dueDate'] as String,
-      id: map['id'] as String,
+      name: (map['name'] ?? '') as String,
+      base64Image: (map['base64Image'] ?? '') as String,
+      faculdade: (map['faculdade'] ?? '') as String,
+      typeCurse: (map['typeCurse'] ?? '') as String,
+      dueDate: (map['dueDate'] ?? '') as String,
+      id: (map['id'] ?? '') as String,
     );
   }
 

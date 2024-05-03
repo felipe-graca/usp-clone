@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:usp_ecard/core/models/user_model.dart';
 import 'package:usp_ecard/core/service/security/i_security_service.dart';
 import 'package:usp_ecard/core/service/storage/i_storage_service.dart';
 
@@ -33,4 +34,39 @@ class SecurityService implements ISecurityService {
 
   @override
   Future<bool> isAuthenticated() async => await storageService.getData<bool?>(key: 'actived') ?? false;
+
+  @override
+  Future<bool> getUser() async {
+    final jsonUser = await storageService.getData<String?>(key: 'user') ?? '';
+
+    if (jsonUser.isEmpty) return false;
+
+    UserStore.instance.setUser(UserModel.fromJson(json.decode(jsonUser)));
+    return true;
+  }
+
+  @override
+  Future<bool> saveUser({required UserModel user}) async {
+    final hasSavedUser = await storageService.saveData(key: 'user', data: json.encode(user.toJson()));
+
+    if (hasSavedUser) {
+      UserStore.instance.setUser(user);
+      return true;
+    }
+    return false;
+  }
+}
+
+class UserStore {
+  UserStore._();
+
+  static final UserStore instance = UserStore._();
+
+  UserModel _user = const UserModel();
+
+  UserModel get user => _user;
+
+  void setUser(UserModel user) {
+    _user = user;
+  }
 }
