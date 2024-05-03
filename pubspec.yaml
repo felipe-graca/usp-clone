@@ -40,6 +40,9 @@ dependencies:
   syncfusion_flutter_barcodes: ^22.2.8
   modal_bottom_sheet: ^3.0.0-pre
   flutter_launcher_icons: ^0.13.1
+  flutter_bloc: ^8.1.5
+  get_it: ^7.7.0
+  google_fonts: ^6.2.1
 
 flutter_launcher_icons:
   android: "launcher_icon"
