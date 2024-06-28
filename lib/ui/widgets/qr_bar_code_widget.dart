@@ -23,86 +23,96 @@ class _QrBarCodeWidgetState extends State<QrBarCodeWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.isQrCode) {
-      return GestureDetector(
-        onTap: () {
-          Dialogs.showCustomDialog(
-            context: context,
-            textInformation: 'Código QR expira em ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} 23:59',
-            child: QrImageView(
-              data: widget.id,
-              version: QrVersions.auto,
-              padding: const EdgeInsets.all(60),
-            ),
-          );
-        },
-        child: Column(
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(7),
-                  child: QrImageView(
-                    padding: EdgeInsets.zero,
-                    data: widget.id,
-                    version: QrVersions.auto,
+      return Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Dialogs.showCustomDialog(
+                context: context,
+                textInformation: 'Código QR expira em ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} 23:59',
+                child: QrImageView(
+                  data: widget.id,
+                  version: QrVersions.auto,
+                  padding: const EdgeInsets.all(60),
+                ),
+              );
+            },
+            child: Column(
+              children: [
+                Container(
+                  width: 150,
+                  height: 150,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: QrImageView(
+                        padding: EdgeInsets.zero,
+                        data: widget.id,
+                        version: QrVersions.auto,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                10.height,
+                Text(
+                  'Código QR expira em ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} 23:59',
+                  style: GoogleFonts.roboto(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
-            10.height,
-            Text(
-              'Código QR expira em ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} 23:59',
-              style: GoogleFonts.roboto(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
+          ),
+          50.height
+        ],
       );
     }
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          barCodeTap = true;
-        });
-        Dialogs.showCustomDialog(
-          context: context,
-          textInformation: widget.id,
-          isBarCode: true,
-          child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            height: 120,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * .6,
-              child: SfBarcodeGenerator(value: widget.id),
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              barCodeTap = true;
+            });
+            Dialogs.showCustomDialog(
+              context: context,
+              textInformation: widget.id,
+              isBarCode: true,
+              child: Container(
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                height: 120,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * .6,
+                  child: SfBarcodeGenerator(value: widget.id),
+                ),
+              ),
+            ).then((value) {
+              setState(() {
+                barCodeTap = false;
+              });
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              height: 120,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * .6,
+                child: !barCodeTap ? SfBarcodeGenerator(value: widget.id) : null,
+              ),
             ),
           ),
-        ).then((value) {
-          setState(() {
-            barCodeTap = false;
-          });
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          height: 120,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * .6,
-            child: !barCodeTap ? SfBarcodeGenerator(value: widget.id) : null,
-          ),
         ),
-      ),
+        50.height
+      ],
     );
   }
 }
